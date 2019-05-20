@@ -7,9 +7,9 @@ authors:
   - { name: Cristóbal Javier Solano Navarro, github: CJsolanonavarro }
 ---
 
-# Título de la práctica
+# Registro de Nivel de iluminación LDR y Humedad en Archivo CSV
 
-Descripción de la práctica
+Envio de datos de sensor LDR y humedad conectados a las entradas analógicas de Arduino y enviados a la Raspberry a traves de Pyserial y guardado en un archivo csv
 
 ![](IMG_9673.JPG)
 ![](IMG_9674.JPG)
