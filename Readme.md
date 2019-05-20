@@ -11,8 +11,8 @@ authors:
 
 Descripción de la práctica
 
-![](IMG_9673.jpg)
-![](IMG_9674.jpg)
+![](IMG_9673.JPG)
+![](IMG_9674.JPG)
 
 ## Materiales
 
