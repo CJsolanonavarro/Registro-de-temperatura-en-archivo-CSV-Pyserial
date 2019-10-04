@@ -39,7 +39,7 @@ Descripción interesante sobre la programación
 
 ```python
 # Programa en python
-rom time import sleep, strftime, time
+from time import sleep, strftime, time
 import serial, time
 
 arduino = serial.Serial('/dev/ttyACM0', 9600)
