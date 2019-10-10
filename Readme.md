@@ -11,8 +11,7 @@ authors:
 
 Envio de datos de los sensores DHT11 conectados a las entradas analógicas de Arduino y enviados a la Raspberry a traves de Pyserial y guardado en un archivo csv
 
-![](IMG_9673.JPG)
-![](IMG_9674.JPG)
+![](Foto Raspberry&Arduino DHT11.jpeg)
 
 ## Materiales
 
