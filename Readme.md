@@ -1,15 +1,15 @@
 ---
-title: Registro de Nivel de iluminación LDR y Humedad en Archivo CSV
-description: Envio de datos de sensor LDR y humedad conectados a las entradas analógicas de Arduino y enviados a la Raspberry a traves de Pyserial y guardado en un archivo csv
+title: Registro de Temperatura y Humedad de dos Sensores DHT11 en Archivo CSV
+description: Envio de datos de dos sensores DHT11 conectados a las entradas analógicas de Arduino y enviados a la Raspberry a traves de Pyserial y guardado en un archivo csv
 tags: Arduino, Raspberry, csv, pyserial
 level: Facil, Medio, Avanzado
 authors:
   - { name: Cristóbal Javier Solano Navarro, github: CJsolanonavarro }
 ---
 
-# Registro de Nivel de iluminación LDR y Humedad en Archivo CSV
+# Registro de Temperaturas y Humedad en Archivo CSV
 
-Envio de datos de sensor LDR y humedad conectados a las entradas analógicas de Arduino y enviados a la Raspberry a traves de Pyserial y guardado en un archivo csv
+Envio de datos de los sensores DHT11 conectados a las entradas analógicas de Arduino y enviados a la Raspberry a traves de Pyserial y guardado en un archivo csv
 
 ![](IMG_9673.JPG)
 ![](IMG_9674.JPG)
@@ -39,10 +39,10 @@ Descripción interesante sobre la programación
 
 ```python
 # Programa en python
-from time import sleep, strftime, time
-import serial, time
-
-arduino = serial.Serial('/dev/ttyACM0', 9600)
+# https://techzeero.com/arduino-tutorials/dht11-with-arduino/
+from time import sleep,strftime,time
+import serial,time
+arduino = serial.Serial('/dev/ttyACM0',9600)
 
 while True:
   cadena = arduino.readline()
@@ -50,14 +50,17 @@ while True:
   if(cadena.decode() != ''):
     cadena = str(cadena.decode())
     cadena = cadena.split(',')
-    luz = int(cadena[0])
-    humedad = int(cadena[1])
-    
-    if luz > 700: # Si hay mucha luz
-        imprimir = 'Luz: '+str(luz)+' - Humedad: '+str(humedad)
+    print(cadena)
+    if len(cadena) == 4: # si tienes 4 sensores
+        humedad0 = int(cadena[0])
+        temperatura0 = int(cadena[1])
+        humedad1 = int(cadena[2])
+        temperatura1 = int(cadena[3])
+        
+        imprimir = str(humedad0)+','+str(temperatura0)+','+str(humedad1)+','+str(temperatura1)
         print(imprimir)
-        with open("/home/pi/Desktop/PROYECTO-PYSERIAL-CSV/pyserial_csv/registro_LDR.csv", "a") as log:#"a" es registro continuo
-            log.write("{0},{1}\n".format(strftime("%Y-%m-%d %H:%M:%S"),str(imprimir)))
+        with open("/home/pi/Desktop/registro_temp_humedad/registro_temp_humedad_08102019_1.csv", "a") as log:#"a" es registro continuo
+            log.write("{0},{1}\n".format(strftime("%Y-%m-%d %H:%M:%S"),imprimir))
   
   time.sleep(1)
 
@@ -66,28 +69,41 @@ arduino.close()
 ```
 
 ```arduino
-// Programa en arduino
-void setup () {
+#include <dht.h>
+
+/* 
+   DHT11 Temperature and Humidity Sensor With Arduino
+   For more details, visit: https://techzeero.com/arduino-tutorials/dht11-with-arduino/
+*/
+
+#define dht_pin0 A0     // Analog Pin A0 of Arduino is connected to DHT11 out pin
+#define dht_pin1 A1
+dht SensorDHT_0;
+dht SensorDHT_1;
+ 
+void setup()
+{
   Serial.begin(9600);
+  //delay(500);
+  //Serial.println("DHT11 Humidity & temperature Sensor\n\n");
+  //delay(1000);
 }
-
-void loop () {
-  int luz = analogRead(0);
-  int humedad = analogRead(0) + 150;
-  
-  String cadena = String(luz) + ',' + String(humedad);
-  Serial.println(cadena);
-  delay(1000);
+ 
+void loop()
+{
+    SensorDHT_0.read11(dht_pin0);
+    int humedad0 = SensorDHT_0.humidity;
+    int temperatura0 = SensorDHT_0.temperature;
+    
+    SensorDHT_1.read11(dht_pin1);
+    int humedad1 = SensorDHT_1.humidity;
+    int temperatura1 = SensorDHT_1.temperature;
+    
+    String cadena = String(humedad0) + ',' + String(temperatura0) + ',' + String(humedad1) + ',' + String(temperatura1);
+    Serial.println(cadena);
+    delay(1000);
+    
 }
-
-
-
-
-
-
-
-
-
 
 ```
 
